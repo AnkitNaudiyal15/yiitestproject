@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
         <?= $form->field($model, 'password')->passwordInput() ?>
-        <?= $form->field($model, 'userDepartment')->dropDownList(
+        <?= $form->field($model, 'department')->dropDownList(
             ArrayHelper::map(Department::find()->all(), 'id', 'department')) 
         ?>
         <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [

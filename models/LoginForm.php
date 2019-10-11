@@ -16,7 +16,7 @@ class LoginForm extends Model
     public $username;
     public $password;
     public $verifyCode;
-    public $userDepartment;
+    public $department;
     public $rememberMe = true;
 
     private $_user = false;
@@ -29,13 +29,13 @@ class LoginForm extends Model
     {
         return [
             // username and password are both required
-            [['username', 'password','userDepartment'], 'required'],
+            [['username', 'password','department'], 'required'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
              // userDepartment is validated by validateuserDepartment()
-             ['userDepartment', 'validateUserDepartment'],
+             ['department', 'validateUserDepartment'],
              // verifyCode needs to be entered correctly
              ['verifyCode', 'captcha'],
            
@@ -66,7 +66,7 @@ class LoginForm extends Model
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-            if (!$user || ($user->user_department!=$this->userDepartment)) {
+            if (!$user || ($user->user_department!=$this->department)) {
                 $this->addError($attribute, 'User is not belongs to this department.');
             }
         }
