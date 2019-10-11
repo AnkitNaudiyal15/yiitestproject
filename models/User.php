@@ -6,14 +6,6 @@ use yii\db\ActiveRecord;
 
 class User extends ActiveRecord implements \yii\web\IdentityInterface
 {
-    public $id;
-    public $username;
-    public $password;
-    public $authKey;
-    public $accessToken;
-
-
-
     public static function tableName()
     {
         $prefix = "e&Y_";
@@ -66,6 +58,14 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     /**
      * {@inheritdoc}
      */
+    public function userDepartment()
+    {
+        return $this->user_department;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getAuthKey()
     {
         return $this->authKey;
@@ -88,5 +88,19 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     public function validatePassword($password)
     {
         return $this->password === $password;
+    }
+
+    /**
+     * Validates user department
+     *
+     * @param string $userDepartment department to validate
+     * @return bool if department provided is valid for current user
+     */
+    public function validateUserDepartment($department)
+    {
+       // echo $this->user_department;
+        //echo $department;
+        //die('jj');
+        return $this->user_department === $department;
     }
 }

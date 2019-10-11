@@ -13,6 +13,7 @@ use app\models\Department;
 use app\models\Status;
 use app\models\Role;
 use app\models\User;
+use app\models\userForm;
 
 class SiteController extends Controller
 {
@@ -77,7 +78,7 @@ class SiteController extends Controller
     {
         /** default department entry for testing  */
 
-        $departmentsData = ['Pollution','Water','Electricity'];
+        $departmentsData = ['Administration','Pollution','Water','Electricity'];
         foreach($departmentsData as $departmentData){
             
             $data = Department::findOne(["department" =>$departmentData]);
@@ -138,7 +139,7 @@ class SiteController extends Controller
 
           /** default user entry for testing  */
               $userType= Role::findOne(['role'=>'Admin']);
-              //$pollution= Department::findOne(['department'=>'Pollution']);
+              $departmentType= Department::findOne(['department'=>'Administration']);
               $data = User::findOne(['username' =>'admin']);
 
               if(count($data)==0){
@@ -147,12 +148,12 @@ class SiteController extends Controller
                       $user->password = 'admin@123$';
                       $user->user_email = 'test@gmail.com';
                       $user->user_type = $userType->id;
-                      $user->user_department = '';
-                      $user->authKey = 'sdsd';
-                      $user->accessToken = 'sdsdwwdd';
+                      $user->user_department = $departmentType->id;
+                      $user->authKey = 'sdsd'.rand(1,1000);
+                      $user->accessToken = 'sdsdwwdd'.rand(1,1000);
                       $user->created_at = date('Y-m-d h:i:s');
                       $user->updated_at = date('Y-m-d h:i:s');
-                      $user->save();  
+                      $user->save(false);  
                   } 
 
         if (!Yii::$app->user->isGuest) {
@@ -210,5 +211,27 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    /**
+     * Displays users page.
+     *
+     * @return string
+     */
+    public function actionUsers()
+    {
+        $model = new userForm();
+        if ($model->load(Yii::$app->request->post()) && $model->createUser()) {
+           return $this->goBack();
+        }
+
+        $departments = Department::find()->indexBy('id')->all();
+        $roles = Role::find()->indexBy('id')->all();
+    
+        return $this->render('users', [
+            'model'=>$model,
+            'roles' => $roles,
+            'departments' => $departments,
+        ]);
     }
 }
