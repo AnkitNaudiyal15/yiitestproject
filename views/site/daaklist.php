@@ -1,6 +1,8 @@
 <?php
 
 use yii\grid\GridView;
+use yii\helpers\Url;
+
 ?>
 <div class="daaklist">
 
@@ -43,11 +45,20 @@ GridView::widget([
                return $data->role->role ;
             },
          ],
+        //  [
+        //     'class' => 'yii\grid\DataColumn', 
+        //     'label' => 'Status',
+        //     'value' => function ($data) {
+        //        return $data->state->status_type ;
+        //     },
+        //  ],
+
          [
             'class' => 'yii\grid\DataColumn', 
-            'label' => 'Status',
+            'label' => 'Accept/Reject',
+            'format' => 'html',
             'value' => function ($data) {
-               return $data->state->status_type ;
+               return '<a href="site/status/'.Url::toRoute(['site/status', 'id' => $data->id]).'">Update Staus</a>' ;
             },
          ],
 

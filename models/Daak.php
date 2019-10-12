@@ -9,11 +9,39 @@ use app\models\Status;
 
 class Daak extends ActiveRecord
 {
-
+    public $status;
+    public $daakSubject;
+    public $daakId;
+    
     public static function tableName()
     {
         $prefix = "e&Y_";
         return $prefix.'daak';
+    }
+
+
+     /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            // username and password are both required
+            [['status', 'daakSubject','daakId'], 'required'],
+           ];
+    }
+
+
+    /**
+     * create daak .
+     * @return bool daak created successfully
+     */
+    public function changeStatus()
+    {
+        if ($this->validate()) {
+            return true;
+        }
+        return false;
     }
 
 

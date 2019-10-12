@@ -304,4 +304,29 @@ class SiteController extends Controller
         'data' => $dataProvider,
         ]);
     }
+
+
+    /**
+     * Displays daak page.
+     *
+     * @return string
+     */
+    public function actionStatus()
+    {
+        $model = new Daak();
+        if ($model->load(Yii::$app->request->post()) && $model->changeStatus()) {
+            $daak = Daak::findOne(Yii::$app->request->post()['Daak']['daakId']);
+            $daak->status = Yii::$app->request->post()['Daak']['status'];
+            $daak->save();
+            return $this->goBack();
+        }
+
+        $daak= Daak::findOne(yii::$app->request->get('id'));
+        $status = Status::find()->where(['<>','status_type','pending'])->all();
+        
+        return $this->render('statuschange.php', [
+        'data' => $daak,
+        'status' => $status
+        ]);
+    }
 }
