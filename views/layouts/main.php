@@ -39,7 +39,7 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             Yii::$app->user->isGuest ?'': (  ['label' => 'Create User', 'url' => ['/site/users']]),
-            Yii::$app->user->isGuest ?'': (  ['label' => 'Create Daak', 'url' => ['/site/users']]),
+            Yii::$app->user->isGuest ?'': (  ['label' => 'Create Daak', 'url' => ['/site/daak']]),
              Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (

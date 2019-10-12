@@ -7,7 +7,6 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
-use app\models\Department;
 use yii\helpers\ArrayHelper;
 
 $this->title = 'Login';
@@ -30,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
         <?= $form->field($model, 'password')->passwordInput() ?>
         <?= $form->field($model, 'department')->dropDownList(
-            ArrayHelper::map(Department::find()->all(), 'id', 'department')) 
+            ArrayHelper::map($departments, 'id', 'department')) 
         ?>
         <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
                         'template' => '<div class="row"><div class="col-lg-9">{image}</div><div class="col-lg-9">{input}</div></div>',

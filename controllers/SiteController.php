@@ -13,10 +13,14 @@ use app\models\Department;
 use app\models\Status;
 use app\models\Role;
 use app\models\User;
-use app\models\userForm;
+use app\models\UserForm;
+use app\models\DaakForm;
+use app\models\Daak;
+use yii\web\UploadedFile;
 
 class SiteController extends Controller
 {
+    public $uploadDocument;
     /**
      * {@inheritdoc}
      */
@@ -214,13 +218,13 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays users page.
+     * Displays create users page.
      *
      * @return string
      */
     public function actionUsers()
     {
-        $model = new userForm();
+        $model = new UserForm();
         if ($model->load(Yii::$app->request->post()) && $model->createUser()) {
            return $this->goBack();
         }
@@ -232,6 +236,47 @@ class SiteController extends Controller
             'model'=>$model,
             'roles' => $roles,
             'departments' => $departments,
+        ]);
+    }
+
+    /**
+     * Displays create daak page.
+     *
+     * @return string
+     */
+    public function actionDaak()
+    {
+ 
+        $loginUser =Yii::$app->user->id;
+        $daak = new DaakForm();
+        if ($daak->load(Yii::$app->request->post()) && $daak->createDaak()) {
+                $daak->file = UploadedFile::getInstance($daak,'file');
+                $path = 'uploads/' . date('Y-m-d h:i:s') . '.' . $daak->file->extension;          
+                $daak->file->saveAs('uploads/' . date('Y-m-d h:i:s') . '.' . $daak->file->extension);
+                $daakFinalData =new Daak();
+                $daakFinalData->subject = $daak->subject;
+                $daakFinalData->content = $daak->content;
+                $daakFinalData->department_type = $daak->department;
+                $daakFinalData->user_type = $daak->role;
+                $daakFinalData->file = $path;
+                $daakFinalData->created_by = Yii::$app->user->id;
+                $daakFinalData->approve_by = '';
+                $daakFinalData->status = $daak->status;
+                $daakFinalData->created_at = date('Y-m-d h:i:s');
+                $daakFinalData->updated_at = date('Y-m-d h:i:s');
+                $daakFinalData->save();
+
+            return $this->goBack();
+        }
+
+        $departments = Department::find()->where(['<>','department','Administration'])->indexBy('id')->all();
+        $roles = Role::find()->where(['<>','role','Admin'])->indexBy('id')->all();
+        $status[0] = Status::findOne(['status_type'=>'pending']);
+        return $this->render('daak', [
+            'model'=>$daak,
+            'roles' => $roles,
+            'departments' => $departments,
+            'status'=>$status
         ]);
     }
 }

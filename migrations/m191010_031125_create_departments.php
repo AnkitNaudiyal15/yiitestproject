@@ -121,7 +121,7 @@ class m191010_031125_create_departments extends Migration
                 'user_type' => Schema::TYPE_INTEGER  . ' NOT NULL',
                 'upload_document' => Schema::TYPE_STRING . ' NOT NULL',
                 'created_by' => Schema::TYPE_INTEGER . ' NOT NULL',
-                'approve_by' => Schema::TYPE_INTEGER . ' NOT NULL',
+                'approve_by' => Schema::TYPE_INTEGER . ' NULL',
                 'status' => Schema::TYPE_INTEGER . ' NOT NULL',
                 'created_at' => Schema::TYPE_DATETIME,
                 'updated_at' => Schema::TYPE_DATETIME,

@@ -15,7 +15,6 @@ class UserForm extends Model
 {
     public $username;
     public $password;
-    public $verifyCode;
     public $department;
     public $role;
     public $email;
@@ -35,23 +34,11 @@ class UserForm extends Model
             ['username', 'validateUser'],
             // email is validated by validateEmail()
             ['email', 'validateEmail'],
-            // verifyCode needs to be entered correctly
-            ['verifyCode', 'captcha'],
-        ];
+         ];
     }
 
 
-    /**
-     * @return array customized attribute labels
-     */
-    public function attributeLabels()
-    {
-        return [
-            'verifyCode' => 'Verification Code',
-        ];
-    }
-
-
+    
     /**
      * Validates the User Department.
      * This method serves as the inline validation for password.
