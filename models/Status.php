@@ -3,6 +3,7 @@
 namespace app\models;
 
 use yii\db\ActiveRecord;
+use app\models\Daak;
 
 class Status extends ActiveRecord
 {
@@ -13,4 +14,11 @@ class Status extends ActiveRecord
         return $prefix.'status';
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDaak()
+    {
+        return $this->belongTo(Daak::className(), ['id' => 'status']);
+    }
 }

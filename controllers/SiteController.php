@@ -17,6 +17,10 @@ use app\models\UserForm;
 use app\models\DaakForm;
 use app\models\Daak;
 use yii\web\UploadedFile;
+use yii\data\ArrayDataProvider;
+use yii\widgets\ListView;
+use yii\data\ActiveDataProvider;
+
 
 class SiteController extends Controller
 {
@@ -273,10 +277,31 @@ class SiteController extends Controller
         $roles = Role::find()->where(['<>','role','Admin'])->indexBy('id')->all();
         $status[0] = Status::findOne(['status_type'=>'pending']);
         return $this->render('daak', [
-            'model'=>$daak,
+            'model'=> $daak,
             'roles' => $roles,
             'departments' => $departments,
-            'status'=>$status
+            'status' => $status
+        ]);
+    }
+
+
+    /**
+     * Displays daak page.
+     *
+     * @return string
+     */
+    public function actionDaaklist()
+    {
+        $data=Daak::find()->with('department','role','state');
+
+        $dataProvider = new ActiveDataProvider([
+        'query' => Daak::find()->with('department','role','state'),
+        'pagination' => [
+        'pageSize' => 10,
+        ],]);
+
+        return $this->render('daaklist', [
+        'data' => $dataProvider,
         ]);
     }
 }
