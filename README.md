@@ -13,6 +13,7 @@
 
 7. login the system and create a new user.
 8. create clerk user
-9. login with clerk and create daak
+9. login with clerk and create daak,
+10. please check web/uploads folder have read write permission if not then please give it the permission otherwise code will not able to upload the file in server.
 
 
