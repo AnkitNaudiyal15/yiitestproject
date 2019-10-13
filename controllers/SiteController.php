@@ -16,6 +16,7 @@ use app\models\User;
 use app\models\UserForm;
 use app\models\DaakForm;
 use app\models\Daak;
+use app\models\Comment;
 use yii\web\UploadedFile;
 use yii\data\ArrayDataProvider;
 use yii\widgets\ListView;
@@ -74,7 +75,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        if(Yii::$app->user->isGuest) {
+			return $this->render('index');
+		} else {
+            return $this->redirect(array('site/daaklist'));
+        }
     }
 
     /**
@@ -292,16 +297,16 @@ class SiteController extends Controller
      */
     public function actionDaaklist()
     {
-        $data=Daak::find()->with('department','role','state');
-
         $dataProvider = new ActiveDataProvider([
         'query' => Daak::find()->with('department','role','state'),
         'pagination' => [
         'pageSize' => 10,
         ],]);
 
+        $users =User::find()->all(); 
         return $this->render('daaklist', [
         'data' => $dataProvider,
+        'users'=> $users,
         ]);
     }
 
@@ -316,17 +321,60 @@ class SiteController extends Controller
         $model = new Daak();
         if ($model->load(Yii::$app->request->post()) && $model->changeStatus()) {
             $daak = Daak::findOne(Yii::$app->request->post()['Daak']['daakId']);
-            $daak->status = Yii::$app->request->post()['Daak']['status'];
-            $daak->save();
+            $daakId = Yii::$app->request->post()['Daak']['daakId'];
+            $daakStatus = Yii::$app->request->post()['Daak']['status'];
+            $daak->updateAll(array('status' => $daakStatus),"id= $daakId");
             return $this->goBack();
         }
 
         $daak= Daak::findOne(yii::$app->request->get('id'));
         $status = Status::find()->where(['<>','status_type','pending'])->all();
-        
         return $this->render('statuschange.php', [
         'data' => $daak,
-        'status' => $status
+        'status' => $status,
+        'selectedStatus' =>$daak->getAttribute('status')
+        ]);
+    }
+
+      /**
+     * Displays daak page.
+     *
+     * @return string
+     */
+    public function actionComment()
+    {
+
+        $model = new Comment();
+      
+        if ($model->load(Yii::$app->request->post()) && $model->comments()) {
+
+            $postData = Yii::$app->request->post('Comment');
+        
+            $model->message = $postData['message'];
+            $model->daak = $postData['daak'];
+            $model->message_by = $postData['messageBy'];
+            $model->created_at = date('Y-m-d h:i:s');
+            $model->save();
+        }
+
+
+        $dataProvider = new ActiveDataProvider([
+        'query' => Comment::find()->with('commenter'),
+        'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]],
+        'pagination' => [
+        'pageSize' => 10,
+        ],]);
+        
+        $daakId = Yii::$app->request->get('id');
+        $daak = Daak::findOne($daakId);
+        
+        $comment = new Comment();
+
+        return $this->render('commentlist', [
+        'data' => $dataProvider,
+        'model' =>  $comment,
+        'daak' =>  $daak,
+        'login' => Yii::$app->user->id
         ]);
     }
 }

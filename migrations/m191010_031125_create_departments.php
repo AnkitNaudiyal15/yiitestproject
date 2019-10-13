@@ -23,6 +23,7 @@ class m191010_031125_create_departments extends Migration
                 $this->rolesTable($prefix);
                 $this->usersTable($prefix);
                 $this->daakTable($prefix);
+                $this->commentTable($prefix);
         }
     
         /**drop table when migration down */
@@ -104,7 +105,7 @@ class m191010_031125_create_departments extends Migration
             $this->dropTable($prefix.'roles');
             $this->dropTable($prefix.'users');
             $this->dropTable($prefix.'daak');
-            //$this->departmentsTableData($prefix);
+            $this->dropTable($prefix.'comments');
         }
 
 
@@ -205,6 +206,53 @@ class m191010_031125_create_departments extends Migration
             );
     }
 
+
+
+            /**departments table schema */
+            public function commentTable($prefix){
+
+                /*create department table schema*/
+                $this->createTable($prefix.'comments', [
+                    'id' => Schema::TYPE_PK,
+                    'message' => Schema::TYPE_TEXT . ' NOT NULL',
+                    'message_by' => Schema::TYPE_INTEGER . ' NOT NULL',
+                    'daak' => Schema::TYPE_INTEGER . ' NOT NULL',
+                    'created_at' => Schema::TYPE_DATETIME,
+                ]);
+
+                /**create index  */
+                $this->createIndex(
+                    'idx-comment-message_by',
+                    $prefix.'comments',
+                    'message_by'
+                );
+
+                $this->createIndex(
+                    'idx-comment-daak',
+                    $prefix.'comments',
+                    'daak'
+                );
+                
+                /**add foreign key */
+                $this->addForeignKey(
+                    'fk-comment-message_by',
+                    $prefix.'comments',
+                    'message_by',
+                    $prefix.'users',
+                    'id',
+                    'CASCADE'
+                );
+
+
+                $this->addForeignKey(
+                    'fk-comment-daak',
+                    $prefix.'comments',
+                    'daak',
+                    $prefix.'daak',
+                    'id',
+                    'CASCADE'
+                );
+        }
 
 
         /**Status table schema */

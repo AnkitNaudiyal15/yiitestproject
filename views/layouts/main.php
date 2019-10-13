@@ -38,6 +38,7 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
+            Yii::$app->user->isGuest ?'': (  ['label' => 'Home', 'url' => ['/site/daaklist']]),
             Yii::$app->user->isGuest ?'': (  ['label' => 'Create User', 'url' => ['/site/users']]),
             Yii::$app->user->isGuest ?'': (  ['label' => 'Create Daak', 'url' => ['/site/daak']]),
              Yii::$app->user->isGuest ? (

@@ -45,13 +45,15 @@ GridView::widget([
                return $data->role->role ;
             },
          ],
-        //  [
-        //     'class' => 'yii\grid\DataColumn', 
-        //     'label' => 'Status',
-        //     'value' => function ($data) {
-        //        return $data->state->status_type ;
-        //     },
-        //  ],
+         [
+            'class' => 'yii\grid\DataColumn', 
+            'label' => 'Comments',
+            'format' => 'html',
+            'value' => function ($data) {
+               return '<a href="site/status/'.Url::toRoute(['site/comment', 'id' => $data->id]).'">Comments</a>' ;
+
+            },
+         ],
 
          [
             'class' => 'yii\grid\DataColumn', 
@@ -62,7 +64,7 @@ GridView::widget([
             },
          ],
 
-        ['class' => 'yii\grid\ActionColumn'],
+   
         
     ],
         

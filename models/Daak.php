@@ -28,6 +28,7 @@ class Daak extends ActiveRecord
         return [
             // username and password are both required
             [['status', 'daakSubject','daakId'], 'required'],
+            [['status'], 'safe'],
            ];
     }
 

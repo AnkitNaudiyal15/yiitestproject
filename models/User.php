@@ -3,6 +3,7 @@
 namespace app\models;
 
 use yii\db\ActiveRecord;
+use app\models\Comment;
 
 class User extends ActiveRecord implements \yii\web\IdentityInterface
 {
@@ -103,4 +104,13 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
         //die('jj');
         return $this->user_department === $department;
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getComment()
+    {
+        return $this->belongTo(Comment::className(), ['id' => 'message_by']);
+    }
+
 }
