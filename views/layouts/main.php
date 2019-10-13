@@ -9,6 +9,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\models\Role;
 
 AppAsset::register($this);
 ?>
@@ -35,12 +36,22 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
+    $roles='';
+    if(!Yii::$app->user->isGuest){
+        $userRole = Yii::$app->user->identity->getAttribute('user_type');
+        $roles = Role::findOne($userRole)->getAttribute('role_alias');
+    
+    }
+    
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
+
             Yii::$app->user->isGuest ?'': (  ['label' => 'Home', 'url' => ['/site/daaklist']]),
-            Yii::$app->user->isGuest ?'': (  ['label' => 'Create User', 'url' => ['/site/users']]),
-            Yii::$app->user->isGuest ?'': (  ['label' => 'Create Daak', 'url' => ['/site/daak']]),
+            //($roles != 'admin') 
+            ($roles!='admin') ?'': (  ['label' => 'Users', 'url' => ['/site/users']]),
+            //($roles != 'clerk')  
+            ($roles!='clerk')?'': (  ['label' => 'Daaks', 'url' => ['/site/daak']]),
              Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
             ) : (

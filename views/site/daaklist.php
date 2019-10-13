@@ -2,10 +2,12 @@
 
 use yii\grid\GridView;
 use yii\helpers\Url;
+$this->title = 'Daak List';
 
 ?>
+<h2> Daak Listing</h2>
+<br>
 <div class="daaklist">
-
 <?= 
 GridView::widget([
     'dataProvider' => $data,
@@ -50,7 +52,22 @@ GridView::widget([
             'label' => 'Comments',
             'format' => 'html',
             'value' => function ($data) {
-               return '<a href="site/status/'.Url::toRoute(['site/comment', 'id' => $data->id]).'">Comments</a>' ;
+            
+               $daakRole = $data->getAttribute('department_type');
+               $daakDepartment = $data->getAttribute('user_type');
+               $daakOwner = $data->getAttribute('created_by');
+               $userRole = Yii::$app->user->identity->getAttribute('user_type');
+               $userDepartment = Yii::$app->user->identity->getAttribute('user_department');
+
+               if($daakOwner == Yii::$app->user->id){
+                  return '<a href="site/status/'.Url::toRoute(['site/comment', 'id' => $data->id]).'">Comments</a>' ;
+               }
+               else if(($userRole == $daakRole) && ($daakDepartment == $userDepartment)){
+                  return '<a href="site/status/'.Url::toRoute(['site/comment', 'id' => $data->id]).'">Comments</a>' ;
+               }else{
+                  return 'You are not autorized to make comment';
+               }
+               
 
             },
          ],
@@ -60,7 +77,22 @@ GridView::widget([
             'label' => 'Accept/Reject',
             'format' => 'html',
             'value' => function ($data) {
-               return '<a href="site/status/'.Url::toRoute(['site/status', 'id' => $data->id]).'">Update Staus</a>' ;
+               
+               $daakRole = $data->getAttribute('department_type');
+               $daakDepartment = $data->getAttribute('user_type');
+               $daakOwner = $data->getAttribute('created_by');
+               $userRole = Yii::$app->user->identity->getAttribute('user_type');
+               $userDepartment = Yii::$app->user->identity->getAttribute('user_department');
+
+               if($daakOwner == Yii::$app->user->id){
+                  return '<a href="site/status/'.Url::toRoute(['site/status', 'id' => $data->id]).'">Update Staus</a>' ;
+               }
+               else if(($userRole == $daakRole) && ($daakDepartment == $userDepartment)){
+                  return '<a href="site/status/'.Url::toRoute(['site/status', 'id' => $data->id]).'">Update Staus</a>' ;
+               }else{
+                  return 'You are not autorized to change status the daak';
+               }
+
             },
          ],
 

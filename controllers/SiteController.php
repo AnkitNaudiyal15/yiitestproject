@@ -109,7 +109,7 @@ class SiteController extends Controller
         /** default Role entry for testing  */
 
         $rolesData['admin'] = 'Admin';
-        $rolesData['cleark'] = 'Clerk';
+        $rolesData['clerk'] = 'Clerk';
         $rolesData['AD'] = 'Additional Director';
         $rolesData['director'] = 'Director';
         $rolesData['manager'] = 'Manager';
@@ -208,7 +208,6 @@ class SiteController extends Controller
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
             Yii::$app->session->setFlash('contactFormSubmitted');
-
             return $this->refresh();
         }
         return $this->render('contact', [
@@ -233,6 +232,7 @@ class SiteController extends Controller
      */
     public function actionUsers()
     {
+        $this->roleManagement(['admin']);
         $model = new UserForm();
         if ($model->load(Yii::$app->request->post()) && $model->createUser()) {
            return $this->goBack();
@@ -254,10 +254,11 @@ class SiteController extends Controller
      * @return string
      */
     public function actionDaak()
-    {
- 
+    { 
+        $this->roleManagement(['clerk']);
         $loginUser =Yii::$app->user->id;
         $daak = new DaakForm();
+
         if ($daak->load(Yii::$app->request->post()) && $daak->createDaak()) {
                 $daak->file = UploadedFile::getInstance($daak,'file');
                 $path = 'uploads/' . date('Y-m-d h:i:s') . '.' . $daak->file->extension;          
@@ -318,6 +319,8 @@ class SiteController extends Controller
      */
     public function actionStatus()
     {
+
+
         $model = new Daak();
         if ($model->load(Yii::$app->request->post()) && $model->changeStatus()) {
             $daak = Daak::findOne(Yii::$app->request->post()['Daak']['daakId']);
@@ -376,5 +379,15 @@ class SiteController extends Controller
         'daak' =>  $daak,
         'login' => Yii::$app->user->id
         ]);
+    }
+    
+    /** checking user are access to view page content or not */
+    public function roleManagement($roles){
+
+        $userRole = Yii::$app->user->identity->getAttribute('user_type');
+        $role = Role::findOne($userRole)->getAttribute('role_alias');
+        if(!in_array($role,$roles )){
+            return $this->redirect(array('site/daaklist'));
+        }
     }
 }
