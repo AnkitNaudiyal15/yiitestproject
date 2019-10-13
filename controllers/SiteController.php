@@ -261,8 +261,8 @@ class SiteController extends Controller
 
         if ($daak->load(Yii::$app->request->post()) && $daak->createDaak()) {
                 $daak->file = UploadedFile::getInstance($daak,'file');
-                $path = 'uploads/' . date('Y-m-d h:i:s') . '.' . $daak->file->extension;          
-                $daak->file->saveAs('uploads/' . date('Y-m-d h:i:s') . '.' . $daak->file->extension);
+                $path = 'uploads/' . date('Y-m-d h:i:s') . '.pdf';          
+                $daak->file->saveAs($path);
                 $daakFinalData =new Daak();
                 $daakFinalData->subject = $daak->subject;
                 $daakFinalData->content = $daak->content;

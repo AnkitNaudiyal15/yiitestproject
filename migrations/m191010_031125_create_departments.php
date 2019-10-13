@@ -120,7 +120,7 @@ class m191010_031125_create_departments extends Migration
                 'content' => Schema::TYPE_TEXT . ' NOT NULL',
                 'department_type' => Schema::TYPE_INTEGER . ' NOT NULL',
                 'user_type' => Schema::TYPE_INTEGER  . ' NOT NULL',
-                'upload_document' => Schema::TYPE_STRING . ' NOT NULL',
+                'file' => Schema::TYPE_STRING . ' NOT NULL',
                 'created_by' => Schema::TYPE_INTEGER . ' NOT NULL',
                 'approve_by' => Schema::TYPE_INTEGER . ' NULL',
                 'status' => Schema::TYPE_INTEGER . ' NOT NULL',

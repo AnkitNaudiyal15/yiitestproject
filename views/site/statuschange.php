@@ -26,7 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
         <?= $form->field($data, 'daakSubject')->textInput(['readonly' => true,'value' => $data->subject]) ?>
-        <?= $form->field($data, 'daakId')->hiddenInput(['readonly' => true,'value' => $data->id])->label(false) ?>
         <?= $form->field($data, 'status')->dropDownList(
             ArrayHelper::map($status, 'id', 'status_type'),array('options' => array($data->getAttribute('status') => array('selected'=>true)))) 
         ?>
@@ -36,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::submitButton('update status', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
             </div>
         </div>
+        <?= $form->field($data, 'daakId')->hiddenInput(['readonly' => true,'value' => $data->id])->label(false) ?>
 
     <?php ActiveForm::end(); ?>
 

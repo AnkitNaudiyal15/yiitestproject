@@ -9,9 +9,7 @@ use app\models\Status;
 
 class Daak extends ActiveRecord
 {
-    public $status;
-    public $daakSubject;
-    public $daakId;
+ 
     
     public static function tableName()
     {
@@ -27,7 +25,7 @@ class Daak extends ActiveRecord
     {
         return [
             // username and password are both required
-            [['status', 'daakSubject','daakId'], 'required'],
+            [['status', ], 'required'],
             [['status'], 'safe'],
            ];
     }
